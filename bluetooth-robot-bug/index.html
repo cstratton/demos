@@ -282,24 +282,26 @@ limitations under the License.
               console.log('Connecting to GATT Server...');
               return device.gatt.connect();
             })
-            .then(server => {
-              gattServer = server;
-              // Get battery service
-              return gattServer.getPrimaryService("0000180f-0000-1000-8000-00805f9b34fb");
-            })
-            .then(service => {
-              // Developer mode sequence is sent to the radio service
-              batteryService = service;
-              console.log('> Found battery service');  
-              return batteryService.getCharacteristic("00002a19-0000-1000-8000-00805f9b34fb");
-            })
+            //.then(server => {
+            //  gattServer = server;
+            //  // Get battery service
+            //  return gattServer.getPrimaryService("0000180f-0000-1000-8000-00805f9b34fb");
+            //})
+            //.then(service => {
+            //  // Developer mode sequence is sent to the radio service
+            //  batteryService = service;
+            //  console.log('> Found battery service');  
+            //  return batteryService.getCharacteristic("00002a19-0000-1000-8000-00805f9b34fb");
+            //})
             .then(() => {
-              console.log('> Found battery characteristic');  
+               //console.log('> Found battery characteristic');  
               // Get control service
+               console.log('> Going for contol service 708a96f0-f200-4e2f-96f0-9bc43c3a31c8');  
               return gattServer.getPrimaryService("708a96f0-f200-4e2f-96f0-9bc43c3a31c8")
             })
             .then(service => {
-              // Commands are sent to the robot service
+                console.log('> Got control service going for characteristic')
+                // Commands are sent to the robot service
               robotService = service;
               // Get Control characteristic
                                                    //708a96f1-f200-4e2f-96f0-9bc43c3a31c8
