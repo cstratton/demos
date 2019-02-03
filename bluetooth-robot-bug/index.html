@@ -254,6 +254,8 @@ limitations under the License.
           }
           busy = true;
           //020031cf0000
+          x = x / 1.25;
+          y = y / 1.25;
           l = 0;
           r = 0;
           if (y < -5) {
@@ -334,7 +336,7 @@ limitations under the License.
             setColor(250, 0, 0);
           }
         }else {
-                                       setColor(0, 16, 0);
+         setColor(0, 16, 0);
          let data = new Uint8Array([2, 0, 0, 0, 0, 0]);
           
           //sendCommand(did, cid, data).then(() => {
