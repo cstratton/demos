@@ -192,6 +192,7 @@ limitations under the License.
         }
 
         function sendCommand(did, cid, data) {
+           return;
           // Create client command packets
           // API docs: https://github.com/orbotix/DeveloperResources/blob/master/docs/Sphero_API_1.50.pdf
           // Next sequence number
@@ -229,15 +230,20 @@ limitations under the License.
             return Promise.resolve();
           }
           busy = true;
-          let did = 0x02; // Virtual device ID
-          let cid = 0x20; // Set RGB LED Output command
+          //let did = 0x02; // Virtual device ID
+          //let cid = 0x20; // Set RGB LED Output command
           // Color command data: red, green, blue, flag
-          let data = new Uint8Array([r, g, b, 0]);
+          let data = new Uint8Array([1, 0, r, g, b, 0, 0]);
 
-          sendCommand(did, cid, data).then(() => {
-            busy = false;
-          })
-          .catch(handleError);
+          //sendCommand(did, cid, data).then(() => {
+          //  busy = false;
+          //})
+          //
+          return controlCharacteristic.writeValue(data).then(() => {
+              console.log('Command write done.');
+              busy = false;
+          }).catch(handleError);
+        
         }
 
         function roll(heading) {
@@ -266,10 +272,7 @@ limitations under the License.
           if (controlCharacteristic == null) {
             navigator.bluetooth.requestDevice({
               filters: [{
-                services: ['22bb746f-2bb0-7554-2d6f-726568705327']
-              }, {
-                // Some BB8 toys advertise -2ba0- instead of -2bb0-.
-                services: ['22bb746f-2ba0-7554-2d6f-726568705327']
+                services: ['708a96f0-f200-4e2f-96f0-9bc43c3a31c8']
               }]
             })
             .then(device => {
@@ -279,54 +282,23 @@ limitations under the License.
             })
             .then(server => {
               gattServer = server;
-              // Get radio service
-              return gattServer.getPrimaryService("22bb746f-2bb0-7554-2d6f-726568705327");
+              // Get battery service
+              return gattServer.getPrimaryService("0000180f-0000-1000-8000-00805f9b34fb");
             })
             .then(service => {
               // Developer mode sequence is sent to the radio service
-              radioService = service;
-              // Get Anti DOS characteristic
-              return radioService.getCharacteristic("22bb746f-2bbd-7554-2d6f-726568705327");
-            })
-            .then(characteristic => {
-              console.log('> Found Anti DOS characteristic');
-              // Send special string
-              let bytes = new Uint8Array('011i3'.split('').map(c => c.charCodeAt()));
-              return characteristic.writeValue(bytes).then(() => {
-                console.log('Anti DOS write done.');
-              })
+              batteryService = service;
+              return batteryService.getCharacteristic("00002a19-0000-1000-8000-00805f9b34fb");
             })
             .then(() => {
-              // Get TX Power characteristic
-              return radioService.getCharacteristic("22bb746f-2bb2-7554-2d6f-726568705327");
-            })
-            .then(characteristic => {
-              console.log('> Found TX Power characteristic');
-              let array = new Uint8Array([0x07]);
-              return characteristic.writeValue(array).then(() => {
-                console.log('TX Power write done.');
-              })
-            })
-            .then(() => {
-              // Get Wake CPU characteristic
-              return radioService.getCharacteristic("22bb746f-2bbf-7554-2d6f-726568705327");
-            })
-            .then(characteristic => {
-              console.log('> Found Wake CPU characteristic');
-              let array = new Uint8Array([0x01]);
-              return characteristic.writeValue(array).then(() => {
-                console.log('Wake CPU write done.');
-              })
-            })
-            .then(() => {
-              // Get robot service
-              return gattServer.getPrimaryService("22bb746f-2ba0-7554-2d6f-726568705327")
+              // Get control service
+              return gattServer.getPrimaryService("708a96f0-f200-4e2f-96f0-9bc43c3a31c8")
             })
             .then(service => {
               // Commands are sent to the robot service
               robotService = service;
               // Get Control characteristic
-              return robotService.getCharacteristic("22bb746f-2ba1-7554-2d6f-726568705327");
+              return robotService.getCharacteristic("708a96f1-f200-4e2f-96f0-9bc43c3a31c87");
             })
             .then(characteristic => {
               console.log('> Found Control characteristic');
