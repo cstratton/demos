@@ -288,10 +288,12 @@ limitations under the License.
           if (controlCharacteristic != null) {
             setColor(0, 16, 0);
             let data = new Uint8Array([2, 0, 0, 0, 0, 0]);
-            return controlCharacteristic.writeValue(data).then(() => {
+            controlCharacteristic.writeValue(data).then(() => {
                 console.log('Command write done.' + data);
                 busy = false;
             }).catch(handleError);
+            progress.hidden = true;
+            return
           } else {            
             navigator.bluetooth.requestDevice({
               filters: [{
@@ -338,9 +340,6 @@ limitations under the License.
               return setColor(200, 0, 250);
             })
             .catch(handleError);
-          } else {
-            progress.hidden = true;
-            setColor(250, 0, 0);
           }
         });
         let joystick = new RetroJoyStick({
