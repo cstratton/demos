@@ -220,6 +220,7 @@ function RetroJoyStick(options) {
     //Make it stop!
     self.x = 0;
     self.y = 0;
+    console.log("Retrostick Up!")
      self.publish('change', [self, 0, 0]);
     //}
   }
@@ -406,8 +407,10 @@ RetroJoyStick.prototype.resetPosition = function () {
   this.angle = 1;
   var prevDistance = this.distance;
   this.distance = 0;
+  this.x = 0;
+  this.y = 0;
 
-  if (prevAngle !== this.angle || prevDistance !== this.distance) {
+  if (1 || prevAngle !== this.angle || prevDistance !== this.distance) {
     this.publish('change', [this, this.angle, this.distance]);
   }
 };
