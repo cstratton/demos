@@ -254,7 +254,19 @@ limitations under the License.
           }
           busy = true;
           //020031cf0000
-          let data = new Uint8Array([2, 0, x, y, 0, 0]);
+          l = 0;
+          r = 0;
+          if (y < -5) {
+            l = 127 + x/2;
+            r = 127 - x/2; 
+          } else if (y > 10) {
+            l = -127 - x/2;
+            r = -127 + x/2;
+          } else {
+            l = x;
+            r = -x;
+          }
+          let data = new Uint8Array([2, 0, l, r, 0, 0]);
           
           //sendCommand(did, cid, data).then(() => {
           //  busy = false;
@@ -321,7 +333,22 @@ limitations under the License.
             progress.hidden = true;
             setColor(250, 0, 0);
           }
-        });
+        }else {
+                                       setColor(0, 16, 0);
+         let data = new Uint8Array([2, 0, 0, 0, 0, 0]);
+          
+          //sendCommand(did, cid, data).then(() => {
+          //  busy = false;
+          //})
+          //
+          return controlCharacteristic.writeValue(data).then(() => {
+              console.log('Command write done.' + data);
+              busy = false;
+          }).catch(handleError);
+                                       
+                                       }
+                                      );
+          
 
         let joystick = new RetroJoyStick({
           retroStickElement: document.querySelector('#retrostick')
