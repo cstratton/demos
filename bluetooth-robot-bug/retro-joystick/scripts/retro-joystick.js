@@ -118,7 +118,8 @@ function RetroJoyStick(options) {
 
     // publicize the distance from center
     self.distance = getDistance(point, centerPoint);
-
+    self.x = point.x - centerPoint.x;
+    self.y = point.y - centerPoint.y;
     // Get angle from center (0-360)
     var theta = Math.atan2(point.y - centerPoint.y, point.x - centerPoint.x);
 
