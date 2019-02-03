@@ -293,8 +293,10 @@ limitations under the License.
             //  console.log('> Found battery service');  
             //  return batteryService.getCharacteristic("00002a19-0000-1000-8000-00805f9b34fb");
             //})
-            .then(() => {
+            .then(server => {
                //console.log('> Found battery characteristic');  
+                gattServer = server;
+                console.log('> Found gatt Server')
               // Get control service
                console.log('> Going for contol service 708a96f0-f200-4e2f-96f0-9bc43c3a31c8');  
               return gattServer.getPrimaryService("708a96f0-f200-4e2f-96f0-9bc43c3a31c8")
