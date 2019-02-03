@@ -217,6 +217,10 @@ function RetroJoyStick(options) {
       else {
         window.removeEventListener('mousemove', handleRetroStickMove, false);
       }
+    //Make it stop!
+    self.x = 0;
+    self.y = 0;
+     self.publish('change', [self, 0, 0]);
     //}
   }
 
