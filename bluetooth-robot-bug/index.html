@@ -246,22 +246,24 @@ limitations under the License.
         
         }
 
-        function roll(heading) {
-          console.log('Roll heading='+heading);
+        function drive(x,y) {
+          console.log('drive x '+x+' y '+y);
           if (busy) {
             // Return if another operation pending
             return Promise.resolve();
           }
           busy = true;
-          let did = 0x02; // Virtual device ID
-          let cid = 0x30; // Roll command
-          // Roll command data: speed, heading (MSB), heading (LSB), state
-          let data = new Uint8Array([10, heading >> 8, heading & 0xFF, 1]);
-
-          sendCommand(did, cid, data).then(() => {
-            busy = false;
-          })
-          .catch(handleError);
+          //020031cf0000
+          let data = new Uint8Array([2, 0, x, y, 0, 0]);
+          
+          //sendCommand(did, cid, data).then(() => {
+          //  busy = false;
+          //})
+          //
+          return controlCharacteristic.writeValue(data).then(() => {
+              console.log('Command write done.' + data);
+              busy = false;
+          }).catch(handleError);
         }
 
         connectToggle.addEventListener('click', () => {
@@ -318,7 +320,7 @@ limitations under the License.
           retroStickElement: document.querySelector('#retrostick')
         });
         joystick.subscribe('change', stick => {
-          roll(stick.angle);
+          drive(stick.x, stick.y);
         });
       });
     </script>
