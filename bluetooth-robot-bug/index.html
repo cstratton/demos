@@ -290,9 +290,11 @@ limitations under the License.
             .then(service => {
               // Developer mode sequence is sent to the radio service
               batteryService = service;
+              console.log('> Found battery service');  
               return batteryService.getCharacteristic("00002a19-0000-1000-8000-00805f9b34fb");
             })
             .then(() => {
+              console.log('> Found battery characteristic');  
               // Get control service
               return gattServer.getPrimaryService("708a96f0-f200-4e2f-96f0-9bc43c3a31c8")
             })
@@ -300,19 +302,20 @@ limitations under the License.
               // Commands are sent to the robot service
               robotService = service;
               // Get Control characteristic
-              return robotService.getCharacteristic("708a96f1-f200-4e2f-96f0-9bc43c3a31c87");
+                                                   //708a96f1-f200-4e2f-96f0-9bc43c3a31c8
+              return robotService.getCharacteristic("708a96f1-f200-4e2f-96f0-9bc43c3a31c8");
             })
             .then(characteristic => {
               console.log('> Found Control characteristic');
               // Cache the characteristic
               controlCharacteristic = characteristic;
               progress.hidden = true;
-              return setColor(0, 250, 0);
+              return setColor(200, 0, 250);
             })
             .catch(handleError);
           } else {
             progress.hidden = true;
-            setColor(0, 250, 0);
+            setColor(250, 0, 0);
           }
         });
 
