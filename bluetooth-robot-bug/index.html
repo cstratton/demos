@@ -285,7 +285,14 @@ limitations under the License.
           // Can only send commands once device is in developer mode.
           // Put device into developer mode by sending a special string to Anti DOS,
           // 7 to TX Power and 1 to Wake CPU on radio service.
-          if (controlCharacteristic == null) {
+          if (controlCharacteristic != null) {
+            setColor(0, 16, 0);
+            let data = new Uint8Array([2, 0, 0, 0, 0, 0]);
+            return controlCharacteristic.writeValue(data).then(() => {
+                console.log('Command write done.' + data);
+                busy = false;
+            }).catch(handleError);
+          else {            
             navigator.bluetooth.requestDevice({
               filters: [{
                 services: ['708a96f0-f200-4e2f-96f0-9bc43c3a31c8']
@@ -335,23 +342,7 @@ limitations under the License.
             progress.hidden = true;
             setColor(250, 0, 0);
           }
-        }else {
-         setColor(0, 16, 0);
-         let data = new Uint8Array([2, 0, 0, 0, 0, 0]);
-          
-          //sendCommand(did, cid, data).then(() => {
-          //  busy = false;
-          //})
-          //
-          return controlCharacteristic.writeValue(data).then(() => {
-              console.log('Command write done.' + data);
-              busy = false;
-          }).catch(handleError);
-                                       
-                                       }
-                                      );
-          
-
+        });
         let joystick = new RetroJoyStick({
           retroStickElement: document.querySelector('#retrostick')
         });
