@@ -261,14 +261,14 @@ limitations under the License.
           l = 0;
           r = 0;
           if (y < -5) {
-            l = 127 + x/2;
-            r = 127 - x/2; 
+            l = 64 + x/4;
+            r = 64 - x/4; 
           } else if (y > 10) {
-            l = -127 - x/2;
-            r = -127 + x/2;
+            l = -64 - x/4;
+            r = -64 + x/4;
           } else {
-            l = x;
-            r = -x;
+            l = x/2;
+            r = -x/2;
           }
           let data = new Uint8Array([2, 0, l, r, 0, 0]);
           
